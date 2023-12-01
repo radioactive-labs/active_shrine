@@ -2,19 +2,12 @@
 
 module ShrineStorage
     class InstallGenerator < Rails::Generators::Base
-    #   include PlutoniumGenerators::Generator
+      source_root File.expand_path('templates', __dir__)
 
-    #   source_root File.expand_path('templates', __dir__)
-
-      desc 'Create a database seed'
-
-    #   argument :name
-    #   class_option :env, type: :string, default: 'all'
+      desc 'Install ShrineStorage'
 
       def start
-        puts "Install"
-      rescue StandardError => e
-        exception 'Creating database seed failed:', e
+        copy_file 'app/models/shrine_attachment.rb' 
       end
 
     #   protected
