@@ -8,6 +8,7 @@ module ShrineStorage
 
       def start
         copy_file 'app/models/shrine_attachment.rb' 
+        copy_file 'config/initializers/shrine.rb' 
       end
 
     #   protected
