@@ -6,8 +6,13 @@ class CreateShrineAttachments < ActiveRecord::Migration[7.0]
       t.belongs_to :record, polymorphic: true, null: true
       t.string :name, null: false
       t.string :type, null: false, default: 'ShrineAttachment'
-      t.jsonb :file_data, null: false
-      t.jsonb :metadata, default: {}, null: false
+      if ActiveRecord::Base.connection.adapter_name.downcase.include?('postgresql')
+        t.jsonb :file_data, null: false
+        t.jsonb :metadata, default: {}, null: false
+      else
+        t.json :file_data, null: false
+        t.json :metadata, default: {}, null: false
+      end
 
       t.timestamps
     end

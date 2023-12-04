@@ -6,11 +6,11 @@ module ShrineStorage
 
       desc 'Install ShrineStorage'
 
-      def start
-        copy_file 'app/models/shrine_attachment.rb' 
-        copy_file 'config/initializers/shrine.rb' 
-        copy_file 'db/migrate/create_shrine_attachments.rb' 
-      end
+      # def start
+      #   copy_file 'app/models/shrine_attachment.rb' 
+      #   copy_file 'config/initializers/shrine.rb' 
+      #   copy_file 'db/migrate/create_shrine_attachments.rb' 
+      # end
 
     #   protected
 
