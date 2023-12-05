@@ -98,6 +98,10 @@ GEM
       psych (>= 4.0.0)
     reline (0.4.1)
       io-console (~> 0.5)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
     rspec-expectations (3.12.3)
@@ -132,6 +136,7 @@ PLATFORMS
 DEPENDENCIES
   combustion
   rake (~> 13.0)
+  rspec
   rspec-rails (~> 6.0.0)
   shrine_storage!
 

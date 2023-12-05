@@ -12,6 +12,18 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 #
+# Configuration Combustion
+require 'bundler'
+
+Bundler.require :default, :development
+
+# :all when using all parts of rails
+# loading only what we need
+# :active_record, :action_controller
+Combustion.initialize! :all 
+
+require 'rspec/rails'
+
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -43,6 +55,8 @@ RSpec.configure do |config|
   # inherited by the metadata hash of host groups and examples, rather than
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.use_transactional_fixtures = true
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
