@@ -34,6 +34,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "railties", ">= 5.0", "< 8"
   spec.add_dependency "shrine"
 
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'combustion'
+
+
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
 end
