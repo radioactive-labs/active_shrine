@@ -24,7 +24,7 @@ module ShrineStorage
     def start
       # migration_template "create_shrine_attachments.rb", "db/migrate/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_create_shrine_attachments.rb"
       copy_file 'create_shrine_attachments.rb', "db/migrate/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_create_shrine_attachments.rb"
-      # rails_command "db:migrate"
+      rails_command "db:migrate"
     end
 
     def json_column

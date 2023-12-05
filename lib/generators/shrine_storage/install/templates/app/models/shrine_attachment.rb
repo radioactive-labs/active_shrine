@@ -23,6 +23,7 @@
 #
 class ShrineAttachment < ApplicationRecord
   include Shrine::Attachment(:file)
+  include ActiveModel::Serializers::JSON
 
   belongs_to :record, polymorphic: true, optional: true
 
