@@ -36,6 +36,10 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
+    appraisal (2.5.0)
+      bundler
+      rake
+      thor (>= 0.14.0)
     base64 (0.2.0)
     bigdecimal (3.1.4)
     builder (3.2.4)
@@ -134,6 +138,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  appraisal
   combustion
   rake (~> 13.0)
   rspec

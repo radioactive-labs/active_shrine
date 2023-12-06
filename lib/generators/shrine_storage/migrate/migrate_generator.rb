@@ -22,9 +22,13 @@ module ShrineStorage
     desc "Create migrations for Shrine Attachment"
 
     def start
-      # migration_template "create_shrine_attachments.rb", "db/migrate/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_create_shrine_attachments.rb"
-      copy_file 'create_shrine_attachments.rb', "db/migrate/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_create_shrine_attachments.rb"
-      rails_command "db:migrate"
+      matched = Dir.glob(File.join("db/migrate/", "*create_shrine_attachments.rb"))
+      if matched.any?
+        puts "Migration file already created and migrated"
+      else 
+        copy_file 'create_shrine_attachments.rb', "db/migrate/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_create_shrine_attachments.rb"
+        rails_command "db:migrate"
+      end
     end
 
     def json_column
