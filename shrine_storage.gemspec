@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Radioactive Labs"]
   # spec.email = []
 
-  spec.summary = "Write a short summary, because RubyGems requires one."
+  spec.summary = "A compatible ActiveStorage api for attaching Shrine uploads to ActiveRecord models"
   spec.description = "Write a longer description or delete this line."
   spec.homepage = "https://rubygems.org"
   spec.license = "MIT"
@@ -33,6 +33,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "railties", ">= 5.0", "< 8"
   spec.add_dependency "shrine"
+  spec.add_dependency "activesupport"
+  spec.add_dependency "activestorage"
 
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'combustion'

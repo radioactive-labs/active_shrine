@@ -61,7 +61,7 @@ module ShrineStorage
       #     has_one_attached :avatar, strict_loading: true
       #   end
       #
-      def has_one_attached(name, class_name: 'ShrineAttachment', dependent: :destroy, strict_loading: false)
+      def has_one_attached(name, class_name: '::ShrineAttachment', dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
           def #{name}
@@ -119,7 +119,7 @@ module ShrineStorage
       #     has_many_attached :photos, strict_loading: true
       #   end
       #
-      def has_many_attached(name, class_name: 'ShrineAttachment', dependent: :destroy, strict_loading: false)
+      def has_many_attached(name, class_name: '::ShrineAttachment', dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         # frozen_string_literal: true
         def #{name}

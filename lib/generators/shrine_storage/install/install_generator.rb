@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require "rails/generators/active_record/migration"
+require 'rails/generators'
+# require "rails/generators/active_record/migration"
 
 module ShrineStorage
     class InstallGenerator < Rails::Generators::Base

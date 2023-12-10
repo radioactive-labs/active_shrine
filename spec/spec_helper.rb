@@ -20,7 +20,7 @@ Bundler.require :default, :development
 # :all when using all parts of rails
 # loading only what we need
 # :active_record, :action_controller
-Combustion.initialize! :all 
+Combustion.initialize! :active_record
 
 require 'rspec/rails'
 
@@ -56,7 +56,7 @@ RSpec.configure do |config|
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
@@ -109,4 +109,6 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  # config.before :
 end

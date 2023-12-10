@@ -21,7 +21,7 @@
 #  index_shrine_attachments_on_name       (name)
 #  index_shrine_attachments_on_record     (record_type,record_id)
 #
-class ShrineAttachment < ApplicationRecord
+class ShrineAttachment < ActiveRecord::Base
   include Shrine::Attachment(:file)
   include ActiveModel::Serializers::JSON
 
