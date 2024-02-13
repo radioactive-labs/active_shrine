@@ -14,11 +14,22 @@ describe TestModel do
         # generator.start [], destination_root: destination_root, behavior: :revoke
     end
 
+    fit 'doesn\'t works' do
+        # m = TestModel.new
+        # m.file = File.open File.expand_path('test.txt', __dir__)
+        # m.save!
+        # puts TestModel.count 
+        puts ShrineAttachment.count
+    end
     it 'works' do
         # m = TestModel.new
         # m.file = File.open File.expand_path('test.txt', __dir__)
         # m.save!
         # puts TestModel.count 
         puts ShrineAttachment.count
+    end
+    it 'just work, works' do
+        ice = 'ice'
+        expect('ice').to eq(ice)
     end
 end
