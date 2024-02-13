@@ -2,13 +2,13 @@
 require 'rails/generators'
 # require "rails/generators/active_record/migration"
 
-module ShrineStorage
+module ActiveShrine
     class InstallGenerator < Rails::Generators::Base
     include Rails::Generators::Migration
 
       source_root File.expand_path('templates', __dir__)
 
-      desc 'Install ShrineStorage'
+      desc 'Install ActiveShrine'
 
       def start
         copy_file 'app/models/shrine_attachment.rb' 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   # = Shrine Storage \Attached \Many
   #
   # Decorated proxy object representing of multiple attachments to a model.

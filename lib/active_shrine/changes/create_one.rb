@@ -3,7 +3,7 @@
 require 'action_dispatch'
 require 'action_dispatch/http/upload'
 
-module ShrineStorage
+module ActiveShrine
   module Changes
     class CreateOne # :nodoc:
       attr_reader :name, :record, :attachable

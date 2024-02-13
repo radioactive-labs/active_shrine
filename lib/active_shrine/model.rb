@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   # Provides the class-level DSL for declaring an Active Record model's attachments.
   module Model
     extend ActiveSupport::Concern
@@ -65,8 +65,8 @@ module ShrineStorage
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
           def #{name}
-            @shrine_storage_attached ||= {}
-            @shrine_storage_attached[:#{name}] ||= One.new("#{name}", self)
+            @active_shrine_attached ||= {}
+            @active_shrine_attached[:#{name}] ||= One.new("#{name}", self)
           end
 
           def #{name}=(attachable)
@@ -123,8 +123,8 @@ module ShrineStorage
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         # frozen_string_literal: true
         def #{name}
-          @shrine_storage_attached ||= {}
-          @shrine_storage_attached[:#{name}] ||= Many.new("#{name}", self)
+          @active_shrine_attached ||= {}
+          @active_shrine_attached[:#{name}] ||= Many.new("#{name}", self)
         end
 
         def #{name}=(attachables)
@@ -170,7 +170,7 @@ module ShrineStorage
 
     def initialize_dup(*) # :nodoc:
       super
-      @shrine_storage_attached = nil
+      @active_shrine_attached = nil
       @shrine_attachment_changes = nil
     end
 

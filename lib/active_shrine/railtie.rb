@@ -1,6 +1,6 @@
 require "rails"
 
-module ShrineStorage
+module ActiveShrine
     class Railtie < ::Rails::Railtie
         
     end

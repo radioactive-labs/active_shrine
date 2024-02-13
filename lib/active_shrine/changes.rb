@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   module Changes # :nodoc:
     extend ActiveSupport::Autoload
 

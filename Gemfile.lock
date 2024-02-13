@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shrine_storage (0.1.0)
+    active_shrine (0.1.0)
       activestorage
       activesupport
       railties (>= 5.0, < 8)
@@ -133,7 +133,7 @@ DEPENDENCIES
   rake (~> 13.0)
   rspec
   rspec-rails (~> 6.0.0)
-  shrine_storage!
+  active_shrine!
   sqlite3
 
 BUNDLED WITH

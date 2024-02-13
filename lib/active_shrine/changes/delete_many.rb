@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   module Changes
-    class DeleteOne # :nodoc:
+    class DeleteMany # :nodoc:
       attr_reader :name, :record
 
       def initialize(name, record)
@@ -10,12 +10,16 @@ module ShrineStorage
         @record = record
       end
 
-      def attachment
-        nil
+      def attachables
+        []
+      end
+
+      def attachments
+        ShrineAttachment.none
       end
 
       def save
-        record.public_send("#{name}_attachment=", nil)
+        record.public_send("#{name}_attachments=", [])
       end
     end
   end

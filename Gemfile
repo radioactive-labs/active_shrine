@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in shrine_storage.gemspec
+# Specify your gem's dependencies in active_shrine.gemspec
 gemspec
 
 

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   # = Shrine Storage \Attached
   #
-  # Abstract base class for the concrete ShrineStorage::Attached::One and ShrineStorage::Attached::Many
+  # Abstract base class for the concrete ActiveShrine::Attached::One and ActiveShrine::Attached::Many
   # classes that both provide proxy access to the attachment association for a record.
   class Attached
     attr_reader :name, :record

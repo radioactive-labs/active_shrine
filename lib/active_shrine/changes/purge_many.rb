@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   module Changes
-    class DetachMany # :nodoc:
+    class PurgeMany # :nodoc:
       attr_reader :name, :record, :attachments
 
       def initialize(name, record, attachments)
@@ -11,11 +11,21 @@ module ShrineStorage
         @attachments = attachments
       end
 
-      def detach
-        return unless attachments.any?
+      def purge
+        attachments.each(&:purge)
+        reset
+      end
 
-        attachments.delete_all if attachments.respond_to?(:delete_all)
+      def purge_later
+        attachments.each(&:purge_later)
+        reset
+      end
+
+      private
+
+      def reset
         record.shrine_attachment_changes.delete(name)
+        record.public_send("#{name}_attachments").reset
       end
     end
   end

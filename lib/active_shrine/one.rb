@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   # = Shrine Storage \One
   #
   # Representation of a single attachment to a model.

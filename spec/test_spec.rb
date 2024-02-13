@@ -1,9 +1,9 @@
 require 'spec_helper.rb'
-require 'generators/shrine_storage/install/install_generator.rb'
+require 'generators/active_shrine/install/install_generator.rb'
 
 describe TestModel do 
     
-    let(:generator) { ShrineStorage::InstallGenerator }
+    let(:generator) { ActiveShrine::InstallGenerator }
     let(:destination_root) { File.expand_path('internal', __dir__) }
     
     before do 
@@ -27,9 +27,5 @@ describe TestModel do
         # m.save!
         # puts TestModel.count 
         puts ShrineAttachment.count
-    end
-    it 'just work, works' do
-        ice = 'ice'
-        expect('ice').to eq(ice)
     end
 end

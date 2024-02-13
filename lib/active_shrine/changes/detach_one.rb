@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   module Changes
-    class PurgeOne # :nodoc:
+    class DetachOne # :nodoc:
       attr_reader :name, :record, :attachment
 
       def initialize(name, record, attachment)
@@ -11,13 +11,10 @@ module ShrineStorage
         @attachment = attachment
       end
 
-      def purge
-        attachment&.purge
-        reset
-      end
+      def detach
+        return unless attachment.present?
 
-      def purge_later
-        attachment&.purge_later
+        attachment.delete
         reset
       end
 

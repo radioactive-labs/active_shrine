@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "shrine_storage/version"
-require_relative "shrine_storage/railtie"
+require_relative "active_shrine/version"
+require_relative "active_shrine/railtie"
 
-module ShrineStorage
+module ActiveShrine
   extend ActiveSupport::Autoload
 
   class Error < StandardError; end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ShrineStorage
+module ActiveShrine
   module Changes
     class CreateMany # :nodoc:
       attr_reader :name, :record, :attachables, :pending_uploads

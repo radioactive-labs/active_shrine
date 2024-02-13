@@ -1,3 +1,3 @@
 test:
   service: Disk
-  root: /Users/Starlet/contrib/shrine_storage/tmp/storage
+  root: /Users/Starlet/contrib/active_shrine/tmp/storage

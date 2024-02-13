@@ -111,6 +111,6 @@ RSpec.configure do |config|
 =end
 
   # config.before :
-  config.example_status_persistence_file_path = 'spec/failed_tests.txt'
-  config.filter_run_when_matching(focus: true)
+  # config.example_status_persistence_file_path = 'spec/failed_tests.txt'
+  # config.filter_run_when_matching(focus: true)
 end
