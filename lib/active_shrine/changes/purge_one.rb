@@ -25,7 +25,7 @@ module ActiveShrine
 
       def reset
         record.shrine_attachment_changes.delete(name)
-        record.public_send("#{name}_attachment=", nil)
+        record.public_send(:"#{name}_attachment=", nil)
       end
     end
   end

@@ -15,5 +15,4 @@ module ActiveShrine
     autoload :Model
     autoload :One
   end
-
 end

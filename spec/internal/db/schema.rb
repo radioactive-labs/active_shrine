@@ -5,8 +5,7 @@
 #   # in migrations.
 # end
 
-
 ActiveRecord::Schema.define do
-  create_table(:test_models, :force => true) do |t|
+  create_table(:test_models, force: true) do |t|
   end
 end

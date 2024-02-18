@@ -61,7 +61,7 @@ module ActiveShrine
       #     has_one_attached :avatar, strict_loading: true
       #   end
       #
-      def has_one_attached(name, class_name: '::ShrineAttachment', dependent: :destroy, strict_loading: false)
+      def has_one_attached(name, class_name: "::ShrineAttachment", dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
           def #{name}
@@ -80,7 +80,7 @@ module ActiveShrine
         CODE
 
         has_one(:"#{name}_attachment", -> { where(name:) }, class_name:, as: :record, inverse_of: :record,
-                                                            dependent:, strict_loading:)
+          dependent:, strict_loading:)
 
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachment") }
 
@@ -119,7 +119,7 @@ module ActiveShrine
       #     has_many_attached :photos, strict_loading: true
       #   end
       #
-      def has_many_attached(name, class_name: '::ShrineAttachment', dependent: :destroy, strict_loading: false)
+      def has_many_attached(name, class_name: "::ShrineAttachment", dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         # frozen_string_literal: true
         def #{name}
@@ -140,7 +140,7 @@ module ActiveShrine
         CODE
 
         has_many(:"#{name}_attachments", -> { where(name:) }, class_name:, as: :record, inverse_of: :record,
-                                                              dependent:, strict_loading:)
+          dependent:, strict_loading:)
 
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachments") }
 

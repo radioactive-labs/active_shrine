@@ -15,7 +15,7 @@ module ActiveShrine
       end
 
       def save
-        record.public_send("#{name}_attachment=", nil)
+        record.public_send(:"#{name}_attachment=", nil)
       end
     end
   end

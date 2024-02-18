@@ -74,6 +74,8 @@ GEM
     minitest (5.20.0)
     nokogiri (1.15.5-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.15.5-x86_64-darwin)
+      racc (~> 1.4)
     public_suffix (5.0.4)
     racc (1.7.3)
     rack (2.2.8)
@@ -119,6 +121,7 @@ GEM
       content_disposition (~> 1.0)
       down (~> 5.1)
     sqlite3 (1.6.9-arm64-darwin)
+    sqlite3 (1.6.9-x86_64-darwin)
     thor (1.3.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -126,14 +129,15 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-darwin-21
 
 DEPENDENCIES
+  active_shrine!
   appraisal
   combustion
   rake (~> 13.0)
   rspec
   rspec-rails (~> 6.0.0)
-  active_shrine!
   sqlite3
 
 BUNDLED WITH

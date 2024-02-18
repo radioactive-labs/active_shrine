@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'action_dispatch'
-require 'action_dispatch/http/upload'
+require "action_dispatch"
+require "action_dispatch/http/upload"
 
 module ActiveShrine
   module Changes
@@ -21,7 +21,7 @@ module ActiveShrine
       end
 
       def save
-        record.public_send("#{name}_attachment=", attachment)
+        record.public_send(:"#{name}_attachment=", attachment)
       end
 
       private
@@ -36,7 +36,7 @@ module ActiveShrine
       end
 
       def find_attachment
-        attachment = record.public_send("#{name}_attachment")
+        attachment = record.public_send(:"#{name}_attachment")
 
         attachment if attachable.is_a?(String) && attachment&.signed_id == attachable
       end

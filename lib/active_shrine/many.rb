@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ActiveShrine
-  # = Shrine Storage \Attached \Many
+  # = ActiveShrineAttached\Many
   #
   # Decorated proxy object representing of multiple attachments to a model.
   class Many < Attached
@@ -30,7 +30,7 @@ module ActiveShrine
     #
     # All methods called on this proxy object that aren't listed here will automatically be delegated to +attachments+.
     def attachments
-      change.present? ? change.attachments : record.public_send("#{name}_attachments")
+      change.present? ? change.attachments : record.public_send(:"#{name}_attachments")
     end
 
     # Attaches one or more +attachables+ to the record.
@@ -44,10 +44,10 @@ module ActiveShrine
     #
     #   See https://shrinerb.com/docs/attacher#attaching for more
     def attach(*attachables)
-      record.public_send("#{name}=", attachments.map(&:signed_id) + attachables.flatten)
+      record.public_send(:"#{name}=", attachments.map(&:signed_id) + attachables.flatten)
       return if record.persisted? && !record.changed? && !record.save
 
-      record.public_send("#{name}")
+      record.public_send(:"#{name}")
     end
 
     # Returns true if any attachments have been made.

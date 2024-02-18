@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ActiveShrine
-  # = Shrine Storage \One
+  # = ActiveShrine\One
   #
   # Representation of a single attachment to a model.
   class One < Attached
@@ -31,7 +31,7 @@ module ActiveShrine
     # You don't have to call this method to access the attachment's methods as
     # they are all available at the model level.
     def attachment
-      change.present? ? change.attachment : record.public_send("#{name}_attachment")
+      change.present? ? change.attachment : record.public_send(:"#{name}_attachment")
     end
 
     # Returns +true+ if an attachment is not attached.
@@ -56,10 +56,10 @@ module ActiveShrine
     #
     #   See https://shrinerb.com/docs/attacher#attaching for more
     def attach(attachable)
-      record.public_send("#{name}=", attachable)
+      record.public_send(:"#{name}=", attachable)
       return if record.persisted? && !record.changed? && !record.save
 
-      record.public_send("#{name}")
+      record.public_send(:"#{name}")
     end
 
     # Returns +true+ if an attachment has been made.

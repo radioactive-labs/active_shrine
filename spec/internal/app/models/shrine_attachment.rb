@@ -33,7 +33,7 @@ class ShrineAttachment < ActiveRecord::Base
   before_save :maybe_store_record
 
   def signed_id
-    value = ({ id:, file: file.to_json, unsafe: metadata['unsafe'] } if file.present?) || {}
+    value = ({id:, file: file.to_json, unsafe: metadata["unsafe"]} if file.present?) || {}
     Rails.application.message_verifier(:attachment).generate value
   end
 
@@ -43,20 +43,20 @@ class ShrineAttachment < ActiveRecord::Base
     # Handle value set from form
     if value.is_a?(String)
       begin
-        metadata['unsafe'] = true
+        metadata["unsafe"] = true
         value = JSON.parse value
       rescue JSON::ParserError
         unsigned = Rails.application.message_verifier(:attachment).verify value
         value = unsigned[:file]
-        metadata['unsafe'] = unsigned['unsafe']
+        metadata["unsafe"] = unsigned["unsafe"]
       end
     else
-      metadata.delete 'unsafe'
+      metadata.delete "unsafe"
     end
 
     super(value)
   rescue ActiveSupport::MessageVerifier::InvalidSignature
-    errors.add(:file, 'is invalid')
+    errors.add(:file, "is invalid")
   end
 
   def purge
@@ -69,8 +69,8 @@ class ShrineAttachment < ActiveRecord::Base
     file_attacher.instance_variable_set :@file, nil # prevent shrine from attempting to destroy the file again
     destroy
   rescue NoMethodError
-    raise NotImplementedError, ('You need to enable Shrine backgrounding to use purge_later: ' \
-                                'https://shrinerb.com/docs/plugins/backgrounding')
+    raise NotImplementedError, ("You need to enable Shrine backgrounding to use purge_later: " \
+                                "https://shrinerb.com/docs/plugins/backgrounding")
   end
 
   def representable?

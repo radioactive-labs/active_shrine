@@ -6,7 +6,7 @@ module ActiveShrine
       private
 
       def find_attachment
-        record.public_send("#{name}_attachments").detect do |attachment|
+        record.public_send(:"#{name}_attachments").detect do |attachment|
           attachable.is_a?(String) && attachment.signed_id == attachable
         end
       end

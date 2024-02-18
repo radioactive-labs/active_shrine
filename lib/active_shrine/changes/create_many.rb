@@ -32,7 +32,7 @@ module ActiveShrine
       end
 
       def assign_associated_attachments
-        record.public_send("#{name}_attachments=", persisted_or_new_attachments)
+        record.public_send(:"#{name}_attachments=", persisted_or_new_attachments)
       end
 
       def persisted_or_new_attachments

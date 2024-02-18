@@ -5,8 +5,8 @@ class CreateShrineAttachments < ActiveRecord::Migration[7.0]
     create_table :shrine_attachments do |t|
       t.belongs_to :record, polymorphic: true, null: true
       t.string :name, null: false
-      t.string :type, null: false, default: 'ShrineAttachment'
-      if ActiveRecord::Base.connection.adapter_name.downcase.include?('postgresql')
+      t.string :type, null: false, default: "ShrineAttachment"
+      if ActiveRecord::Base.connection.adapter_name.downcase.include?("postgresql")
         t.jsonb :file_data, null: false
         t.jsonb :metadata, default: {}, null: false
       else

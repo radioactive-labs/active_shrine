@@ -36,10 +36,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport"
   spec.add_dependency "activestorage"
 
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'combustion'
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "combustion"
   spec.add_development_dependency "appraisal"
-
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

@@ -1,7 +1,6 @@
 require "rails"
 
 module ActiveShrine
-    class Railtie < ::Rails::Railtie
-        
-    end
+  class Railtie < ::Rails::Railtie
+  end
 end
