@@ -49,8 +49,12 @@ module ActiveShrine
       file.original_filename
     end
 
+    def extension
+      file.extension
+    end
+
     def representable?
-      %r{image/.*}.match? file.mime_type
+      %r{image/.*}.match? content_type
     end
 
     def signed_id
