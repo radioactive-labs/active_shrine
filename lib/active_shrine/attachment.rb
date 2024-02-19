@@ -73,7 +73,7 @@ module ActiveShrine
         rescue JSON::ParserError
           # this is not a valid json hash, let's check if it is a valid signed_id
           unsigned = Rails.application.message_verifier(:active_shrine_attachment).verify value
-          value = JSON.parse unsigned['file']
+          value = JSON.parse unsigned["file"]
         end
       end
 

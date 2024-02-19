@@ -72,9 +72,9 @@ module ActiveShrine
           def #{name}=(attachable)
             shrine_attachment_changes["#{name}"] =
               if attachable.presence.nil?
-                Changes::DeleteOne.new("#{name}", self)
+                Attached::Changes::DeleteOne.new("#{name}", self)
               else
-                Changes::CreateOne.new("#{name}", self, attachable)
+                Attached::Changes::CreateOne.new("#{name}", self, attachable)
               end
           end
         CODE
@@ -132,9 +132,9 @@ module ActiveShrine
           pending_uploads = shrine_attachment_changes["#{name}"].try(:pending_uploads)
 
           shrine_attachment_changes["#{name}"] = if attachables.none?
-            Changes::DeleteMany.new("#{name}", self)
+            Attached::Changes::DeleteMany.new("#{name}", self)
           else
-            Changes::CreateMany.new("#{name}", self, attachables, pending_uploads: pending_uploads)
+            Attached::Changes::CreateMany.new("#{name}", self, attachables, pending_uploads: pending_uploads)
           end
         end
         CODE

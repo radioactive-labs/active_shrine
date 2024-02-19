@@ -11,7 +11,6 @@ module ActiveShrine
   eager_autoload do
     autoload :Attached
     autoload :Attachment
-    autoload :Changes
     autoload :Job
     autoload :Many
     autoload :Model
