@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "shrine"
+
 module ActiveShrine
   module Job
     module DestroyShrineAttachment

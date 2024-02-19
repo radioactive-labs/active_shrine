@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ActiveShrine
-  module Changes # :nodoc:
+  module Job # :nodoc:
     extend ActiveSupport::Autoload
 
     eager_autoload do

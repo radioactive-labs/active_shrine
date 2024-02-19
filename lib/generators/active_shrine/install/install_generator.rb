@@ -15,6 +15,10 @@ module ActiveShrine
       directory "app"
       directory "config"
       migration_template "db/migrate/create_active_shrine_attachments.rb", "db/migrate/create_active_shrine_attachments.rb"
+
+      Bundler.with_unbundled_env do
+        run "bundle add fastimage"
+      end
     end
 
     def self.next_migration_number(dirname)

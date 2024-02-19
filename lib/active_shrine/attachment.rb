@@ -38,25 +38,27 @@ module ActiveShrine
     before_save :maybe_store_record
 
     def signed_id
-      value = ({id:, file: file.to_json, unsafe: metadata["unsafe"]} if file.present?) || {}
+      value = ({id:, file: file.to_json, active_shrine_checksum: metadata["active_shrine_checksum"]} if file.present?) || {}
       Rails.application.message_verifier(:active_shrine_attachment).generate value
     end
 
     def file=(value)
-      # If it is the same file, we do nothing
+      # It is the same file. we are good to go.
       return if value == signed_id
 
       if value.is_a?(String)
-        # if it is an already uploaded file either
-        # - in cache (uploaded via direct upload) so the form is sending us a json hash
-        # - or in store (already promoted) so the form is sending us the signed_id
+        # it is an already uploaded file. either
+        # - via direct upload so the form is sending us a json hash to set
+        # - or was set because a previous submission failed, so the form is sending us the signed_id
 
-        # first mark this as unsafe. the record is not saved yet so this does not hit the db
-        # if a failure occurs while trying to save the record
-        # then this unsafe value will be encoded in the value returned by #signed_id, which is used to populate the form
-        # that way, when a reupload is attempted, value == signed_id above will always be false
-        # forcing us to re-validate the value
-        metadata["unsafe"] = true
+        # first set a checksum
+        # if a failure occurs while trying to save the record then the checksum value will be encoded in the value returned by #signed_id
+        # the form then sets the signed_id as the value of the field
+        # since we are not yet persisted to the database, when the form is resubmitted,
+        # `value == signed_id` above will always be false, since signed_id will using a value loaded from the database
+        # while value will be using our random value
+        # NB: if the restore_cached_data is enabled, it resets the metadata during promotion
+        metadata["active_shrine_checksum"] = SecureRandom.hex
         begin
           # attempt to parse as a json hash
           value = JSON.parse value
@@ -64,14 +66,14 @@ module ActiveShrine
           # this is not a valid json hash, let's check if it is a valid signed_id
           unsigned = Rails.application.message_verifier(:active_shrine_attachment).verify value
           value = unsigned[:file]
-          # restore the unsafe value
           debugger
-          metadata["unsafe"] = unsigned["unsafe"]
+          # restore the active_shrine_checksum value
+          metadata["active_shrine_checksum"] = unsigned[:active_shrine_checksum]
         end
       else
         # else it is either an i/o object or a file hash (from shrine)
         # either way, this is safe now since we know it is being set programmatically
-        metadata.delete "unsafe"
+        metadata.delete "active_shrine_checksum"
       end
 
       super(value)
