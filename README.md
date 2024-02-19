@@ -28,7 +28,14 @@ rails g active_shrine:install
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class Blog < ApplicationRecord
+  include ActiveShrine::Model
+
+  has_one_attached :avatar
+  has_many_attached :documents
+end
+```
 
 ## Development
 
