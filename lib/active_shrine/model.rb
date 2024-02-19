@@ -4,6 +4,7 @@ module ActiveShrine
   # Provides the class-level DSL for declaring an Active Record model's attachments.
   module Model
     extend ActiveSupport::Concern
+    include ActiveShrine::Reflection::ActiveRecordExtensions
 
     ##
     # :method: *_attachment
@@ -61,12 +62,16 @@ module ActiveShrine
       #     has_one_attached :avatar, strict_loading: true
       #   end
       #
+      # Note: ActiveShrine relies on polymorphic associations, which in turn store class names in the database.
+      # When renaming classes that use <tt>has_many</tt>, make sure to also update the class names in the
+      # <tt>active_shrine_attachments.record_type</tt> polymorphic type column of
+      # the corresponding rows.
       def has_one_attached(name, class_name: "::ActiveShrine::Attachment", dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
           def #{name}
             @active_shrine_attached ||= {}
-            @active_shrine_attached[:#{name}] ||= One.new("#{name}", self)
+            @active_shrine_attached[:#{name}] ||= Attached::One.new("#{name}", self)
           end
 
           def #{name}=(attachable)
@@ -86,7 +91,15 @@ module ActiveShrine
 
         after_save { shrine_attachment_changes[name.to_s]&.save }
 
+        reflection = ActiveRecord::Reflection.create(
+          :has_one_attached,
+          name,
+          nil,
+          {dependent:, source: :active_shrine},
+          self
+        )
         yield reflection if block_given?
+        ActiveRecord::Reflection.add_shrine_attachment_reflection(self, name, reflection)
       end
 
       # Specifies the relation between multiple attachments and the model.
@@ -112,19 +125,23 @@ module ActiveShrine
       # If the +:dependent+ option isn't set, all the attachments will be destroyed
       # (i.e. deleted from the database and file storage) whenever the record is destroyed.
       #
-      # If you need to configure +strict_loading+ to enable lazy loading of attachments,
+      # If you need to enable +strict_loading+ to prevent lazy loading of attachment,
       # pass the +:strict_loading+ option. You can do:
       #
       #   class Gallery < ApplicationRecord
       #     has_many_attached :photos, strict_loading: true
       #   end
       #
+      # Note: ActiveShrine relies on polymorphic associations, which in turn store class names in the database.
+      # When renaming classes that use <tt>has_many</tt>, make sure to also update the class names in the
+      # <tt>active_shrine_attachments.record_type</tt> polymorphic type column of
+      # the corresponding rows.
       def has_many_attached(name, class_name: "::ActiveShrine::Attachment", dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         # frozen_string_literal: true
         def #{name}
           @active_shrine_attached ||= {}
-          @active_shrine_attached[:#{name}] ||= Many.new("#{name}", self)
+          @active_shrine_attached[:#{name}] ||= Attached::Many.new("#{name}", self)
         end
 
         def #{name}=(attachables)
@@ -146,17 +163,15 @@ module ActiveShrine
 
         after_save { shrine_attachment_changes[name.to_s]&.save }
 
-        # after_commit(on: %i[create update]) { shrine_attachment_changes.delete(name.to_s).try(:upload) }
-
-        # reflection = ActiveRecord::Reflection.create(
-        #   :has_many_attached,
-        #   name,
-        #   nil,
-        #   { dependent:, service_name: service },
-        #   self
-        # )
+        reflection = ActiveRecord::Reflection.create(
+          :has_many_attached,
+          name,
+          nil,
+          {dependent:, source: :active_shrine},
+          self
+        )
         yield reflection if block_given?
-        # ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
+        ActiveRecord::Reflection.add_shrine_attachment_reflection(self, name, reflection)
       end
     end
 

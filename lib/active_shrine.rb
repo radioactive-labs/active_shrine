@@ -12,8 +12,7 @@ module ActiveShrine
     autoload :Attached
     autoload :Attachment
     autoload :Job
-    autoload :Many
     autoload :Model
-    autoload :One
+    autoload :Reflection
   end
 end

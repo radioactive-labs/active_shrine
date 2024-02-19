@@ -5,7 +5,7 @@ module ActiveShrine
     # = ActiveShrine\Attached\One
     #
     # Representation of a single attachment to a model.
-    class One < Attached
+    class One < Base
       ##
       # :method: purge
       #

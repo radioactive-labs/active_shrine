@@ -5,7 +5,7 @@ module ActiveShrine
     # = ActiveShrine\Attached\Many
     #
     # Decorated proxy object representing of multiple attachments to a model.
-    class Many < Attached
+    class Many < Base
       ##
       # :method: purge
       #
