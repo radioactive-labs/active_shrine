@@ -15,7 +15,7 @@ module ActiveShrine
       end
 
       def attachments
-        ShrineAttachment.none
+        ActiveShrine::Attachment.none
       end
 
       def save

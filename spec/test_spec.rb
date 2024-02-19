@@ -18,13 +18,13 @@ describe TestModel do
     # m.file = File.open File.expand_path('test.txt', __dir__)
     # m.save!
     # puts TestModel.count
-    puts ShrineAttachment.count
+    puts ActiveShrine::Attachment.count
   end
   it "works" do
     # m = TestModel.new
     # m.file = File.open File.expand_path('test.txt', __dir__)
     # m.save!
     # puts TestModel.count
-    puts ShrineAttachment.count
+    puts ActiveShrine::Attachment.count
   end
 end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class CreateShrineAttachments < ActiveRecord::Migration[7.0]
+class CreateActiveShrineAttachments < ActiveRecord::Migration[7.0]
   def change
     create_table :shrine_attachments do |t|
       t.belongs_to :record, polymorphic: true, null: true
       t.string :name, null: false
-      t.string :type, null: false, default: "ShrineAttachment"
+      t.string :type, null: false, default: "ActiveShrine::Attachment"
       if ActiveRecord::Base.connection.adapter_name.downcase.include?("postgresql")
         t.jsonb :file_data, null: false
         t.jsonb :metadata, default: {}, null: false

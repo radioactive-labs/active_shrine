@@ -45,7 +45,7 @@ module ActiveShrine
       #   User.with_attached_avatar
       #
       # Under the covers, this relationship is implemented as a +has_one+ association to a
-      # ShrineAttachment record. These associations are available as +avatar_attachment+.
+      # ActiveShrine::Attachment record. These associations are available as +avatar_attachment+.
       # But you shouldn't need to work with these associations directly in most circumstances.
       #
       # The system has been designed to having you go through the One
@@ -61,7 +61,7 @@ module ActiveShrine
       #     has_one_attached :avatar, strict_loading: true
       #   end
       #
-      def has_one_attached(name, class_name: "::ShrineAttachment", dependent: :destroy, strict_loading: false)
+      def has_one_attached(name, class_name: "::ActiveShrine::Attachment", dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
           def #{name}
@@ -103,7 +103,7 @@ module ActiveShrine
       #   Gallery.where(user: Current.user).with_attached_photos
       #
       # Under the covers, this relationship is implemented as a +has_many+ association to a
-      # ShrineAttachment record. These associations are available as +photos_attachments+.
+      # ActiveShrine::Attachment record. These associations are available as +photos_attachments+.
       # But you shouldn't need to work with these associations directly in most circumstances.
       #
       # The system has been designed to having you go through the Many
@@ -119,7 +119,7 @@ module ActiveShrine
       #     has_many_attached :photos, strict_loading: true
       #   end
       #
-      def has_many_attached(name, class_name: "::ShrineAttachment", dependent: :destroy, strict_loading: false)
+      def has_many_attached(name, class_name: "::ActiveShrine::Attachment", dependent: :destroy, strict_loading: false)
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
         # frozen_string_literal: true
         def #{name}

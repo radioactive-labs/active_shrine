@@ -7,10 +7,12 @@ module ActiveShrine
   extend ActiveSupport::Autoload
 
   class Error < StandardError; end
-  # Your code goes here...
+
   eager_autoload do
     autoload :Attached
+    autoload :Attachment
     autoload :Changes
+    autoload :Job
     autoload :Many
     autoload :Model
     autoload :One

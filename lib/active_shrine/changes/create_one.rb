@@ -42,7 +42,7 @@ module ActiveShrine
       end
 
       def build_attachment
-        ShrineAttachment.new(record:, name:)
+        ActiveShrine::Attachment.new(record:, name:)
       end
     end
   end
