@@ -91,6 +91,8 @@ module ActiveShrine
 
         after_save { shrine_attachment_changes[name.to_s]&.save }
 
+        after_commit(on: %i[create update]) { shrine_attachment_changes.delete(name.to_s) }
+
         reflection = ActiveRecord::Reflection.create(
           :has_one_attached,
           name,
@@ -162,6 +164,8 @@ module ActiveShrine
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachments") }
 
         after_save { shrine_attachment_changes[name.to_s]&.save }
+
+        after_commit(on: %i[create update]) { shrine_attachment_changes.delete(name.to_s) }
 
         reflection = ActiveRecord::Reflection.create(
           :has_many_attached,
