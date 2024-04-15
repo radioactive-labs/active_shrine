@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    active_shrine (0.1.0)
+    active_shrine (0.1.1)
       activestorage
       activesupport
       railties (>= 5.0, < 8)
