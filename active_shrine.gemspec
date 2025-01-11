@@ -6,13 +6,12 @@ Gem::Specification.new do |spec|
   spec.name = "active_shrine"
   spec.version = ActiveShrine::VERSION
   spec.authors = ["Radioactive Labs"]
-  # spec.email = []
 
   spec.summary = "A compatible ActiveStorage api for attaching Shrine uploads to ActiveRecord models"
   spec.description = "Write a longer description or delete this line."
   spec.homepage = "https://rubygems.org"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.1.0"
+  spec.required_ruby_version = ">= 3.2"
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"] = spec.homepage
@@ -31,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "railties", ">= 5.0", "< 8"
+  spec.add_dependency "railties"
   spec.add_dependency "shrine"
   spec.add_dependency "activesupport"
   spec.add_dependency "activestorage"

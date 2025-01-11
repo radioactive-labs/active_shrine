@@ -38,7 +38,7 @@ module ActiveShrine
       #     has_one_attached :avatar
       #   end
       #
-      # There is no column defined on the model side, Active Storage takes
+      # There is no column defined on the model side, ActiveShrine takes
       # care of the mapping between your records and the attachment.
       #
       # To avoid N+1 queries, you can include the attachments in your query like so:
@@ -110,7 +110,7 @@ module ActiveShrine
       #     has_many_attached :photos
       #   end
       #
-      # There are no columns defined on the model side, Active Storage takes
+      # There are no columns defined on the model side, ActiveShrine takes
       # care of the mapping between your records and the attachments.
       #
       # To avoid N+1 queries, you can include the attachments in your query like so:
