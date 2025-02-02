@@ -7,11 +7,12 @@ module ActiveShrine
   module Attached
     module Changes
       class CreateOne # :nodoc:
-        attr_reader :name, :record, :attachable
+        attr_reader :name, :record, :attachment_class, :attachable
 
-        def initialize(name, record, attachable)
+        def initialize(name, record, attachment_class, attachable)
           @name = name
           @record = record
+          @attachment_class = attachment_class
           @attachable = attachable
 
           attach
@@ -43,7 +44,7 @@ module ActiveShrine
         end
 
         def build_attachment
-          ActiveShrine::Attachment.new(record:, name:)
+          attachment_class.new(record:, name:)
         end
       end
     end

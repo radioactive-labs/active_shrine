@@ -1,51 +1,127 @@
 # ActiveShrine
 
-TODO: Delete this and the text below, and describe your gem
+ActiveShrine integrates Shrine file attachments with Active Record models using a familiar API inspired by Active Storage. It provides a simple, flexible way to manage file uploads in your Rails applications while leveraging Shrine's powerful features.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/active_shrine`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Features
 
-## Quick Start
+- **Active Storage-like API**: Familiar `has_one_attached` and `has_many_attached` interface
+- **Customizable Uploaders**: Use custom Shrine uploaders with validation, processing, and more
+- **Polymorphic Associations**: Attachments are stored using polymorphic associations
+- **Eager Loading Support**: Prevent N+1 queries with `with_attached_*` scopes
 
-Get ActiveShrine up and running in your Rails application with these simple steps:
+## Installation
 
-1. **Add Plutonium to your Gemfile:**
+Add ActiveShrine to your application's Gemfile:
 
 ```ruby
 gem "active_shrine"
 ```
 
-2. **Bundle Install:**
+Then execute:
 
-```shell
-bundle
+```bash
+$ bundle install
 ```
 
-3. **Install ActiveShrine:**
+Generate and run the migration:
 
-```shell
-rails g active_shrine:install
+```bash
+$ rails generate active_shrine:install
+$ rails db:migrate
 ```
 
-## Usage
+## Basic Usage
+
+Include `ActiveShrine::Model` in your models and declare attachments:
 
 ```ruby
-class Blog < ApplicationRecord
+class User < ApplicationRecord
   include ActiveShrine::Model
 
   has_one_attached :avatar
-  has_many_attached :documents
+  has_many_attached :photos
+end
+```
+
+Work with attachments using a familiar API:
+
+```ruby
+# Attach a file
+user.avatar = File.open("avatar.jpg")
+user.save
+
+# Access the attachment
+user.avatar.url
+user.avatar.content_type
+user.avatar.filename
+
+# Remove the attachment
+user.avatar = nil
+user.save
+```
+
+### Eager Loading
+
+Prevent N+1 queries by eager loading attachments:
+
+```ruby
+# Single attachment
+User.with_attached_avatar
+
+# Multiple attachments
+User.with_attached_photos
+```
+
+## Custom Uploaders
+
+Define custom uploaders with Shrine features and validations:
+
+```ruby
+class ImageUploader < Shrine
+  plugin :validation_helpers
+  plugin :derivatives
+
+  Attacher.validate do
+    validate_max_size 10 * 1024 * 1024
+    validate_mime_type %w[image/jpeg image/png image/webp]
+  end
+  
+  Attacher.derivatives do |original|
+    {
+      small: shrine_derivative(:resize_to_limit, 300, 300),
+      medium: shrine_derivative(:resize_to_limit, 500, 500)
+    }
+  end
+end
+```
+
+Use custom uploaders in your models:
+
+```ruby
+class User < ApplicationRecord
+  include ActiveShrine::Model
+
+  has_one_attached :avatar, uploader: ::ImageUploader
 end
 ```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+1. Run `bin/setup` to install dependencies
+2. Run `bundle exec rake test` to run the tests
+3. Run `bin/console` for an interactive prompt
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/active_shrine. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/active_shrine/blob/main/CODE_OF_CONDUCT.md).
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/active_shrine.
 
 ## License
 

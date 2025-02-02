@@ -32,10 +32,51 @@ module ActiveShrine
     #   Gallery.with_attached_photos
 
     class_methods do
+      private
+
+      # Resolves or creates a custom attachment class for a given uploader.
+      #
+      # @param uploader [Class] the uploader class (e.g. ::ImageUploader)
+      # @return [Class, String] the resolved attachment class and its name
+      def resolve_attachment_class(uploader)
+        attachment_class_name = "::ActiveShrine::#{uploader}Attachment"
+
+        # Try to find or create the custom attachment class
+        attachment_class = begin
+          attachment_class_name.constantize
+        rescue NameError
+          # Dynamically create a new class that inherits from ActiveShrine::Attachment
+          Class.new(::ActiveShrine::Attachment) do
+            include uploader::Attachment(:file)
+          end.tap do |klass|
+            # Define the class in the ActiveShrine namespace
+            ActiveShrine.const_set(:"#{uploader}Attachment", klass)
+          end
+        end
+
+        [attachment_class, attachment_class_name]
+      end
+
+      public
+
       # Specifies the relation between a single attachment and the model.
       #
       #   class User < ApplicationRecord
       #     has_one_attached :avatar
+      #   end
+      #
+      # You can specify a custom uploader implementation to use for the attachment:
+      #
+      #  class ImageUploader < Shrine
+      #    plugin :validation_helpers
+      #
+      #     Attacher.validate do
+      #       validate_max_size 10 * 1024 * 1024
+      #     end
+      #   end
+      #
+      #   class User < ApplicationRecord
+      #     has_one_attached :avatar, uploader: ::ImageUploader
       #   end
       #
       # There is no column defined on the model side, ActiveShrine takes
@@ -66,7 +107,9 @@ module ActiveShrine
       # When renaming classes that use <tt>has_many</tt>, make sure to also update the class names in the
       # <tt>active_shrine_attachments.record_type</tt> polymorphic type column of
       # the corresponding rows.
-      def has_one_attached(name, class_name: "::ActiveShrine::Attachment", dependent: :destroy, strict_loading: false)
+      def has_one_attached(name, uploader: ::Shrine, dependent: :destroy, strict_loading: false)
+        attachment_class, attachment_class_name = resolve_attachment_class(uploader)
+
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
           def #{name}
@@ -79,13 +122,18 @@ module ActiveShrine
               if attachable.presence.nil?
                 Attached::Changes::DeleteOne.new("#{name}", self)
               else
-                Attached::Changes::CreateOne.new("#{name}", self, attachable)
+                Attached::Changes::CreateOne.new("#{name}", self, #{attachment_class}, attachable)
               end
           end
         CODE
 
-        has_one(:"#{name}_attachment", -> { where(name:) }, class_name:, as: :record, inverse_of: :record,
-          dependent:, strict_loading:)
+        has_one(:"#{name}_attachment",
+          -> { where(name:) },
+          class_name: attachment_class_name,
+          as: :record,
+          inverse_of: :record,
+          dependent: dependent,
+          strict_loading: strict_loading)
 
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachment") }
 
@@ -97,7 +145,7 @@ module ActiveShrine
           :has_one_attached,
           name,
           nil,
-          {dependent:, source: :active_shrine},
+          {dependent: dependent, class_name: attachment_class_name, source: :active_shrine},
           self
         )
         yield reflection if block_given?
@@ -108,6 +156,20 @@ module ActiveShrine
       #
       #   class Gallery < ApplicationRecord
       #     has_many_attached :photos
+      #   end
+      #
+      # You can specify a custom Shrine implementation to use for the attachments:
+      #
+      #  class ImageUploader < Shrine
+      #    plugin :validation_helpers
+      #
+      #     Attacher.validate do
+      #       validate_max_size 10 * 1024 * 1024
+      #     end
+      #   end
+      #
+      #   class Gallery < ApplicationRecord
+      #     has_many_attached :photos, uploader: ::ImageUploader
       #   end
       #
       # There are no columns defined on the model side, ActiveShrine takes
@@ -138,28 +200,35 @@ module ActiveShrine
       # When renaming classes that use <tt>has_many</tt>, make sure to also update the class names in the
       # <tt>active_shrine_attachments.record_type</tt> polymorphic type column of
       # the corresponding rows.
-      def has_many_attached(name, class_name: "::ActiveShrine::Attachment", dependent: :destroy, strict_loading: false)
+      def has_many_attached(name, uploader: ::Shrine, dependent: :destroy, strict_loading: false)
+        _, attachment_class_name = resolve_attachment_class(uploader)
+
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
-        # frozen_string_literal: true
-        def #{name}
-          @active_shrine_attached ||= {}
-          @active_shrine_attached[:#{name}] ||= Attached::Many.new("#{name}", self)
-        end
-
-        def #{name}=(attachables)
-          attachables = Array(attachables).compact_blank
-          pending_uploads = shrine_attachment_changes["#{name}"].try(:pending_uploads)
-
-          shrine_attachment_changes["#{name}"] = if attachables.none?
-            Attached::Changes::DeleteMany.new("#{name}", self)
-          else
-            Attached::Changes::CreateMany.new("#{name}", self, attachables, pending_uploads: pending_uploads)
+          # frozen_string_literal: true
+          def #{name}
+            @active_shrine_attached ||= {}
+            @active_shrine_attached[:#{name}] ||= Attached::Many.new("#{name}", self)
           end
-        end
+
+          def #{name}=(attachables)
+            attachables = Array(attachables).compact_blank
+            pending_uploads = shrine_attachment_changes["#{name}"].try(:pending_uploads)
+
+            shrine_attachment_changes["#{name}"] = if attachables.none?
+              Attached::Changes::DeleteMany.new("#{name}", self)
+            else
+              Attached::Changes::CreateMany.new("#{name}", self, #{attachment_class}, attachables, pending_uploads: pending_uploads)
+            end
+          end
         CODE
 
-        has_many(:"#{name}_attachments", -> { where(name:) }, class_name:, as: :record, inverse_of: :record,
-          dependent:, strict_loading:)
+        has_many(:"#{name}_attachments",
+          -> { where(name:) },
+          class_name: attachment_class_name,
+          as: :record,
+          inverse_of: :record,
+          dependent: dependent,
+          strict_loading: strict_loading)
 
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachments") }
 
@@ -171,7 +240,7 @@ module ActiveShrine
           :has_many_attached,
           name,
           nil,
-          {dependent:, source: :active_shrine},
+          {dependent: dependent, class_name: attachment_class_name, source: :active_shrine},
           self
         )
         yield reflection if block_given?

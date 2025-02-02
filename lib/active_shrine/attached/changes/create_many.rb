@@ -4,11 +4,12 @@ module ActiveShrine
   module Attached
     module Changes
       class CreateMany # :nodoc:
-        attr_reader :name, :record, :attachables, :pending_uploads
+        attr_reader :name, :record, :attachment_class, :attachables, :pending_uploads
 
-        def initialize(name, record, attachables, pending_uploads: [])
+        def initialize(name, record, attachment_class, attachables, pending_uploads: [])
           @name = name
           @record = record
+          @attachment_class = attachment_class
           @attachables = Array(attachables)
           @pending_uploads = Array(pending_uploads) + subchanges
           attachments
@@ -29,7 +30,7 @@ module ActiveShrine
         end
 
         def build_subchange_from(attachable)
-          Attached::Changes::CreateOneOfMany.new(name, record, attachable)
+          Attached::Changes::CreateOneOfMany.new(name, record, attachment_class, attachable)
         end
 
         def assign_associated_attachments

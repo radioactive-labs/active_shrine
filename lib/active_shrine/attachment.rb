@@ -25,7 +25,6 @@ require "shrine"
 #
 module ActiveShrine
   class Attachment < ActiveRecord::Base
-    include Shrine::Attachment(:file)
     include ActiveModel::Serializers::JSON
 
     self.table_name = "active_shrine_attachments"
