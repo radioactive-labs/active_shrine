@@ -137,7 +137,12 @@ module ActiveShrine
 
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachment") }
 
-        after_save { shrine_attachment_changes[name.to_s]&.save }
+        after_save do
+          shrine_attachment_changes[name.to_s]&.save
+        rescue => e
+          errors.add(name, :invalid, message: "failed to save. Please make sure it is a valid file.")
+          raise ActiveRecord::RecordInvalid.new(self)
+        end
 
         after_commit(on: %i[create update]) { shrine_attachment_changes.delete(name.to_s) }
 
@@ -232,7 +237,12 @@ module ActiveShrine
 
         scope :"with_attached_#{name}", -> { includes(:"#{name}_attachments") }
 
-        after_save { shrine_attachment_changes[name.to_s]&.save }
+        after_save do
+          shrine_attachment_changes[name.to_s]&.save
+        rescue => e
+          errors.add(name, :invalid, message: "failed to save. Please make sure it is a valid file.")
+          raise ActiveRecord::RecordInvalid.new(self)
+        end
 
         after_commit(on: %i[create update]) { shrine_attachment_changes.delete(name.to_s) }
 
