@@ -206,7 +206,7 @@ module ActiveShrine
       # <tt>active_shrine_attachments.record_type</tt> polymorphic type column of
       # the corresponding rows.
       def has_many_attached(name, uploader: ::Shrine, dependent: :destroy, strict_loading: false)
-        _, attachment_class_name = resolve_attachment_class(uploader)
+        attachment_class, attachment_class_name = resolve_attachment_class(uploader)
 
         generated_association_methods.class_eval <<-CODE, __FILE__, __LINE__ + 1
           # frozen_string_literal: true
