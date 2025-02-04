@@ -48,6 +48,7 @@ module ActiveShrine
           # Dynamically create a new class that inherits from ActiveShrine::Attachment
           Class.new(::ActiveShrine::Attachment) do
             include uploader::Attachment(:file)
+            include ::ActiveShrine::Attachment::AttachmentMethods
           end.tap do |klass|
             # Define the class in the ActiveShrine namespace
             ActiveShrine.const_set(:"#{uploader}Attachment", klass)
