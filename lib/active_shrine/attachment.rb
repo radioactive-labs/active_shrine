@@ -36,8 +36,8 @@ module ActiveShrine
 
     before_save :maybe_store_record
 
-    def url(derivative=nil)
-      file_url(derivative) || file_url
+    def url
+      file_url
     end
 
     def content_type
