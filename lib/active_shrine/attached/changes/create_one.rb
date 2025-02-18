@@ -23,6 +23,14 @@ module ActiveShrine
         end
 
         def save
+          unless attachment.valid?
+            attachment.errors.each do |error|
+              record.errors.add(name, error.message)
+            end
+            
+            raise ActiveRecord::RecordInvalid.new(record)
+          end
+
           record.public_send(:"#{name}_attachment=", attachment)
         end
 
