@@ -5,7 +5,7 @@ class CreateActiveShrineAttachments < ActiveRecord::Migration[7.0]
     # Use Active Record's configured type for primary and foreign keys
     primary_key_type, foreign_key_type = primary_and_foreign_key_types
 
-    create_table :shrine_attachments, id: primary_key_type do |t|
+    create_table :active_shrine_attachments, id: primary_key_type do |t|
       t.belongs_to :record, polymorphic: true, null: true, type: foreign_key_type
       t.string :name, null: false
       t.string :type, null: false, default: "ActiveShrine::Attachment"
@@ -19,9 +19,15 @@ class CreateActiveShrineAttachments < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-    add_index :shrine_attachments, :name
-    add_index :shrine_attachments, :file_data, using: :gin
-    add_index :shrine_attachments, :metadata, using: :gin
+    
+    add_index :active_shrine_attachments, :name
+    if ActiveRecord::Base.connection.adapter_name.downcase.include?("postgresql")
+      add_index :active_shrine_attachments, :file_data, using: :gin
+      add_index :active_shrine_attachments, :metadata, using: :gin
+    else
+      add_index :active_shrine_attachments, :file_data
+      add_index :active_shrine_attachments, :metadata
+    end
   end
 
   private

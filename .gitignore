@@ -8,3 +8,8 @@
 /tmp/
 .DS_Store
 Gemfile.lock
+test/internal/db/*.sqlite*
+
+Gemfile.lock
+/vendor/bundle/
+/gemfiles/*.gemfile.lock
