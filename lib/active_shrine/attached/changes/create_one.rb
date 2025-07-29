@@ -27,7 +27,7 @@ module ActiveShrine
             attachment.errors.each do |error|
               record.errors.add(name, error.message)
             end
-            
+
             raise ActiveRecord::RecordInvalid.new(record)
           end
 

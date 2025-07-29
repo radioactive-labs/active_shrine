@@ -6,11 +6,11 @@ class GeneratorTest < Minitest::Test
     @generator = ActiveShrine::InstallGenerator
     @destination_root = File.expand_path("test_generator_files", __dir__)
   end
-  
+
   def teardown
     FileUtils.rm_rf(@destination_root) if File.exist?(@destination_root)
   end
-  
+
   def test_generates_files
     @generator.start [], destination_root: @destination_root, behavior: :invoke
 

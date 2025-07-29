@@ -81,7 +81,7 @@ module ActiveShrine
           end
         end
 
-        super(value)
+        super
       rescue ActiveSupport::MessageVerifier::InvalidSignature
         errors.add(:file, "is invalid")
       end
@@ -101,10 +101,10 @@ module ActiveShrine
       end
 
       private
-  
+
       def maybe_store_record
         return unless record.present?
-  
+
         metadata.merge! record_type:, record_id:
       end
     end

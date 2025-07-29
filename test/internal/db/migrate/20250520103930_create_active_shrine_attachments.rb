@@ -19,7 +19,7 @@ class CreateActiveShrineAttachments < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-    
+
     add_index :active_shrine_attachments, :name
     if ActiveRecord::Base.connection.adapter_name.downcase.include?("postgresql")
       add_index :active_shrine_attachments, :file_data, using: :gin
@@ -31,12 +31,12 @@ class CreateActiveShrineAttachments < ActiveRecord::Migration[7.0]
   end
 
   private
-  
+
   def primary_and_foreign_key_types
     config = Rails.configuration.generators
     setting = config.options[config.orm][:primary_key_type]
     primary_key_type = setting || :primary_key
     foreign_key_type = setting || :bigint
-    [ primary_key_type, foreign_key_type ]
+    [primary_key_type, foreign_key_type]
   end
 end
