@@ -105,6 +105,64 @@ class User < ApplicationRecord
 end
 ```
 
+## Updating Polymorphic Associations
+
+ActiveShrine uses polymorphic associations to link your models to their attachments. When you change an uploader for an existing attachment (for example, switching from the default `Shrine` uploader to a custom `ImageUploader`), you may need to update the polymorphic association data in existing records.
+
+The attachment class names are stored in the `active_shrine_attachments` table in the `record_type` column. When you change uploaders, these class names need to be updated to maintain the correct associations.
+
+### Example Migration
+
+If you previously had:
+
+```ruby
+class User < ApplicationRecord
+  include ActiveShrine::Model
+
+  has_one_attached :avatar  # Uses default Shrine uploader
+end
+```
+
+And you're changing to:
+
+```ruby
+class User < ApplicationRecord
+  include ActiveShrine::Model
+
+  has_one_attached :avatar, uploader: ::ImageUploader
+end
+```
+
+You'll need to create a migration to update existing attachment records:
+
+```ruby
+class UpdateAvatarAttachmentClasses < ActiveRecord::Migration[7.0]
+  def up
+    # Update existing avatar attachments to use the new ImageUploader attachment class
+    ActiveShrine::Attachment
+      .where(name: 'avatar', record_type: 'User')
+      .update_all(record_type: 'ActiveShrine::ImageUploaderAttachment')
+  end
+end
+```
+
+### Important Notes
+
+- **Backup First**: Always backup your database before running these migrations
+- **Test Thoroughly**: Test the migration on a copy of your production data first
+- **Class Names**: The attachment class names follow the pattern `ActiveShrine::{UploaderName}Attachment`
+
+### Verifying the Update
+
+After running the migration, you can verify that your attachments are working correctly:
+
+```ruby
+# Your existing attachments should continue to work
+user = User.find(1)
+user.avatar.url  # Should work correctly with the new uploader
+user.avatar.class  # Should be ActiveShrine::ImageUploaderAttachment
+```
+
 ## Development
 
 After checking out the repo:
