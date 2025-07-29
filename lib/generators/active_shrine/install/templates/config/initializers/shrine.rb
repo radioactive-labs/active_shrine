@@ -29,23 +29,11 @@ Shrine.plugin :refresh_metadata
 Shrine.plugin :backgrounding
 
 Shrine::Attacher.promote_block do
-  if PromoteShrineAttachmentJob.respond_to? :perform_async
-    # sidekiq
-    PromoteShrineAttachmentJob.perform_async(self.class.name, record.class.name, record.id, name.to_s, file_data)
-  else
-    # activejob
-    PromoteShrineAttachmentJob.perform_later(self.class.name, record.class.name, record.id, name.to_s, file_data)
-  end
+  PromoteShrineAttachmentJob.perform_later(self.class.name, record.class.name, record.id, name.to_s, file_data)
 end
 
 Shrine::Attacher.destroy_block do
-  if PromoteShrineAttachmentJob.respond_to? :perform_async
-    # sidekiq
-    DestroyShrineAttachmentJob.perform_async(self.class.name, data)
-  else
-    # activejob
-    DestroyShrineAttachmentJob.perform_later(self.class.name, data)
-  end
+  DestroyShrineAttachmentJob.perform_later(self.class.name, data)
 end
 
 Shrine.plugin :upload_endpoint, url: true
