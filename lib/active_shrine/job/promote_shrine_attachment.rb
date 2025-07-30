@@ -7,11 +7,10 @@ module ActiveShrine
     module PromoteShrineAttachment
       private
 
-      def perform(attacher_class, record_class, record_id, name, file_data)
-        attacher_class = attacher_class.constantize
-        record = record_class.constantize.find(record_id)
-
-        attacher = attacher_class.retrieve(model: record, name:, file: file_data)
+      def perform(attacher_class, attachment_record_class, attachment_record_id, record_class, attribute_name, file_data)
+        record_class.constantize # materialize the uploader polymorphic class
+        attachment_record = attachment_record_class.constantize.find(attachment_record_id)
+        attacher = attacher_class.constantize.retrieve(model: attachment_record, name: attribute_name, file: file_data)
         attacher.atomic_promote
       rescue Shrine::AttachmentChanged, ActiveRecord::RecordNotFound
         # attachment has changed or record has been deleted, nothing to do

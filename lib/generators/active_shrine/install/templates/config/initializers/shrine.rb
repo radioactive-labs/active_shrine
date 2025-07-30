@@ -29,11 +29,13 @@ Shrine.plugin :refresh_metadata
 Shrine.plugin :backgrounding
 
 Shrine::Attacher.promote_block do
-  PromoteShrineAttachmentJob.perform_later(self.class.name, record.class.name, record.id, name.to_s, file_data)
+  PromoteShrineAttachmentJob.perform_later(self.class.name, record.class.name, record.id, record.record_type, name.to_s, file_data)
 end
 
 Shrine::Attacher.destroy_block do
-  DestroyShrineAttachmentJob.perform_later(self.class.name, data)
+  DestroyShrineAttachmentJob.perform_later(self.class.name, record.record_type, data)
 end
 
 Shrine.plugin :upload_endpoint, url: true
+Shrine.plugin :derivatives, create_on_promote: true
+Shrine.plugin :processing
