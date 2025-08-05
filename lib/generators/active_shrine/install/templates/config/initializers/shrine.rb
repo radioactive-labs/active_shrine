@@ -38,4 +38,3 @@ end
 
 Shrine.plugin :upload_endpoint, url: true
 Shrine.plugin :derivatives, create_on_promote: true
-Shrine.plugin :processing
