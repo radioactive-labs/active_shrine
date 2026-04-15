@@ -1,0 +1,19 @@
+{
+  "planPath": "docs/superpowers/plans/2026-04-14-attachment-url-primitive.md",
+  "tasks": [
+    {
+      "id": 1,
+      "subject": "Task 1: Enable derivatives in test shrine config",
+      "status": "pending",
+      "description": "**Goal:** Add the Shrine `derivatives` plugin to the test environment so tests can exercise variant URLs.\n\n**Files:**\n- Modify: `test/internal/config/initializers/shrine.rb`\n\n**Acceptance Criteria:**\n- [ ] `Shrine.plugin :derivatives` is loaded in the test init file.\n- [ ] Existing test suite still passes.\n\n**Verify:** `bundle exec rake test` → existing tests pass.\n\n```json:metadata\n{\"files\": [\"test/internal/config/initializers/shrine.rb\"], \"verifyCommand\": \"bundle exec rake test\", \"acceptanceCriteria\": [\"derivatives plugin loaded\", \"existing tests pass\"], \"requiresUserVerification\": false}\n```"
+    },
+    {
+      "id": 2,
+      "subject": "Task 2: Implement Attachment#url with variant + strict support",
+      "status": "pending",
+      "blockedBy": [1],
+      "description": "**Goal:** Replace the no-arg `url` method with a signature that accepts a variant and a `strict:` kwarg, driven by the full behavior matrix in tests.\n\n**Files:**\n- Create: `test/attachment_test.rb`\n- Modify: `lib/active_shrine/attachment.rb` (method at line 40-42)\n\n**Verify:** `bundle exec rake test TEST=test/attachment_test.rb` → all 11 cases pass.\n\n```json:metadata\n{\"files\": [\"test/attachment_test.rb\", \"lib/active_shrine/attachment.rb\"], \"verifyCommand\": \"bundle exec rake test TEST=test/attachment_test.rb\", \"acceptanceCriteria\": [\"new signature accepts variant and strict\", \"non-strict fallback chain works\", \"strict returns nil until stored\", \"no regressions in existing callers\"], \"requiresUserVerification\": false}\n```"
+    }
+  ],
+  "lastUpdated": "2026-04-14"
+}

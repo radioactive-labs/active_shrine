@@ -41,6 +41,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "standard"
   spec.add_development_dependency "combustion"
   spec.add_development_dependency "appraisal"
+  spec.add_development_dependency "marcel"
+  spec.add_development_dependency "mini_mime"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

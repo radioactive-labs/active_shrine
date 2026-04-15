@@ -37,8 +37,19 @@ module ActiveShrine
     before_save :maybe_store_record
 
     module AttachmentMethods
-      def url
-        file_url
+      # Returns a URL for this attachment.
+      #
+      # @param variant [Symbol, nil] derivative name (e.g. :thumb). If the
+      #   derivative does not exist, falls back to the original.
+      # @param strict [Boolean] when true, returns nil unless the file has
+      #   been promoted to permanent storage. Defaults to false, which
+      #   returns the cache URL during the pending window so uploads are
+      #   visible immediately.
+      def url(variant = nil, strict: false)
+        attacher = file_attacher
+        return nil if strict && !attacher.stored?
+
+        (variant && attacher.url(variant)) || attacher.url
       end
 
       def content_type

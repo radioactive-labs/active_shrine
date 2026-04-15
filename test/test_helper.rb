@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "active_shrine"
+require "active_job"
+ActiveJob::Base.queue_adapter = :inline
 
 require "minitest/autorun"
 require "minitest/reporters"
