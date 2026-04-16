@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.7.1] - 2026-04-16
+
+- Bridge attacher errors to `record.errors` on `has_many_attached`
+
 ## [0.7.0] - 2026-04-15
 
 - Support `variant:` and `strict:` options in `Attachment#url`
