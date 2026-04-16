@@ -20,7 +20,14 @@ module ActiveShrine
         end
 
         def save
+          raise ActiveRecord::RecordInvalid.new(record) unless valid?
+
           assign_associated_attachments
+        end
+
+        def valid?
+          # .map then .all? — don't short-circuit; collect errors from every subchange
+          subchanges.map(&:valid?).all?
         end
 
         private
