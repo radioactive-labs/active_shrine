@@ -88,3 +88,35 @@ class AttachmentUrlTest < Minitest::Test
     assert_nil @attachment.url(:thumb, strict: true)
   end
 end
+
+# metadata round-trips through a JSON column, so a row read back from the
+# database carries string keys. Merging the record pointer in as symbols left
+# both spellings in the hash: json warns on that today and raises from 3.0.
+# Shrine's own after_save persist means an ordinary attach saves twice, so any
+# attachment that gets a file after its row exists hits this.
+class AttachmentRecordPointerKeysTest < Minitest::Test
+  def setup
+    @model = TestModel.create!
+    io = StringIO.new(AttachmentUrlTest::PNG_BYTES.dup)
+    io.define_singleton_method(:original_filename) { "pixel.png" }
+    io.define_singleton_method(:content_type) { "image/png" }
+    @model.file = io
+    @model.save!
+    @attachment = @model.file_attachment
+  end
+
+  def teardown
+    @attachment&.file_attacher&.destroy
+    @model&.destroy
+  end
+
+  def test_record_pointer_does_not_duplicate_string_keys_as_symbols
+    @attachment.reload
+    @attachment.send(:maybe_store_record)
+
+    keys = @attachment.metadata.keys
+    assert_equal keys.uniq(&:to_s), keys, "metadata carries a key under two spellings: #{keys.inspect}"
+    assert_equal @model.class.name, @attachment.metadata["record_type"]
+    assert_equal @model.id, @attachment.metadata["record_id"]
+  end
+end

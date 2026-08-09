@@ -116,7 +116,13 @@ module ActiveShrine
       def maybe_store_record
         return unless record.present?
 
-        metadata.merge! record_type:, record_id:
+        # String keys, because metadata comes back from its JSON column with
+        # string keys and this runs on every save. Merging symbols in left the
+        # pointer under both spellings, which the json gem warns about now and
+        # refuses from 3.0. Shrine persists again from its own after_save, so
+        # an attachment that receives a file after its row exists saves twice
+        # and hits this on the second pass.
+        metadata.merge!("record_type" => record_type, "record_id" => record_id)
       end
     end
   end
